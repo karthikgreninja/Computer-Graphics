@@ -22,6 +22,7 @@ green = (0,128,0)
 red = (128,0,0)
 
 SPEED = 2
+SPEED_2 = SPEED - 1
 limit = 1
 eggs_lost = 0
 score = 0
@@ -240,8 +241,8 @@ def catch_detect(egg_pos, basket_pos):
         e_x = egg_pos[0]
         e_y = egg_pos[1]
 
-        if (e_x >= b_x and e_x <= b_x + basket_size):
-            if (e_y <= b_y + 0.1 and e_y >= b_y - 0.1):
+        if (e_x >= b_x - basket_size/2 and e_x <= b_x + basket_size):
+            if (abs(e_y  - b_y) < basket_size/2):
                 egg_list.pop(index)
                 return True
         return False
@@ -302,26 +303,25 @@ while not gameStart:
 
 screen.fill(background_colour)   
 while not gameOver:
-    clock.tick(60)
+    clock.tick(30)
     screen.fill(background_colour)    
     drawCloud()
     drawSun()
     drawHillFarmHouse()
+    
     #Increasing difficulty based on score
     if score >= 1:
         stone_limit = 1
         limit = 2
-        SPEED = 2
-        #basket_pos[1] = height - basket_size -10
+        SPEED = 3
         level_up_1_music_count += 1
         if(level_up_1_music_count == 1):
             pygame.mixer.Channel(1).play(pygame.mixer.Sound('smw_power-up.wav'))
     
-    elif score >= 10:
+    elif score >= 5:
         stone_limit = 2
         limit = 2
-        SPEED = 3
-        #basket_pos[1] = height - basket_size -20
+        SPEED = 4
         level_up_2_music_count += 1
         if(level_up_2_music_count == 1):
             pygame.mixer.Channel(1).play(pygame.mixer.Sound('smw_power-up.wav'))
@@ -338,13 +338,13 @@ while not gameOver:
                 if x == 0:
                     x = width
                 else: 
-                    x-=10
+                    x -= 10
             if event.key == pygame.K_RIGHT:
                 #Warping from extreme right to extreme left
                 if x == width:
                     x = 0
                 else:
-                    x+=10
+                    x += 10
             basket_pos = [x,y]
 
     #Choosing drop location of eggs
@@ -357,12 +357,13 @@ while not gameOver:
     for egg_pos in egg_list:
         pygame.draw.ellipse(screen, white, (egg_pos[0], egg_pos[1], egg_size, egg_size + 2))
   
+    SPEED_2 = SPEED - 1
     #Dropping the eggs
     for index, egg_pos in enumerate(egg_list):
         if index == 0:
             egg_speed = SPEED
         else:
-            egg_speed = SPEED - 1    
+            egg_speed = SPEED_2    
         if egg_pos[1] >= 0 and egg_pos[1] < height:
                 egg_pos[1] += egg_speed
         else:
