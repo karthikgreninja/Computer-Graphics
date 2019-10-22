@@ -479,7 +479,7 @@ while not gameOver:
     pygame.draw.line(screen, basket_border, (basket_pos[0] + 10 ,basket_pos[1]), (basket_pos[0] + 10 ,basket_pos[1] + 20 ) , 1)
     pygame.draw.line(screen, basket_border, (basket_pos[0] + 20 ,basket_pos[1]), (basket_pos[0] + 20 ,basket_pos[1] + 20 ) , 1)
     
-    if eggs_lost >= 1000:
+    if eggs_lost >= 10:
         gameOver = True
     pygame.display.update()
 
